@@ -41,9 +41,12 @@ class HBBPlugin
 
     function __construct(){
         add_action('init', array($this, 'custom_post_type') );
+        
     }
     
-        
+     function register() {
+         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
+     }   
     
 
 function activate(){
@@ -63,10 +66,16 @@ function custom_post_type(){
     register_post_type( 'book',['public' => true, 'label' => 'Books']);
 
 }
+ function enqueue(){
+     //enqueue all of our scripts
+     wp_enqueue_style('mypluginstyle', plugins_url('/assests/mystyle.css', __file__));
+     wp_enqueue_script('mypluginscript', plugins_url('/assests/myscript.js', __file__));
+ }
 }
 
 if( class_exists('HBBPlugin')){
 $HBBPlugin = new HBBPlugin('installed here now!');
+$HBBPlugin->register();
 
 }
 

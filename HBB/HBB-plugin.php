@@ -30,85 +30,75 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 Copyright (C) 2021  James Lockwood
 */
 
-if (! defined('ABSPATH') ) {
-    die;
-}
-if( !class_exists('HBBPlugin')){
+defined( 'ABSPATH' ) or die( 'Hey, what are you doing here? You silly human!' );
 
-class HBBPlugin
-{
-    // creates the plugin name var
-    public $plugin;
-
-    function __construct(){
-        //store name of the plugin
-        $this->plugin = plugin_basename(__FILE__);
-
-         add_action('init', array($this, 'custom_post_type') );    
-    }
-    //register the enqueue scripts 
-     function register() {
-         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
-        
-         // add leftside dropdown menu
-         add_action( 'admin_menu', array( $this, 'add_admin_pages') );
-        //settings link  drop down
-         add_filter( "plugin_action_links_$this->plugin", array( $this, 'settings_link' ));
-     }   
-
-    public function add_admin_pages(){
-        add_menu_page( 'HBB Plugin', 'HBB', 'manage_options', 'hbb_plugin', array( $this, 'admin_index'), 'dashicons-store', 110 );
-
-    }
-    public function admin_index (){
-        require_once plugin_dir_path(__FILE__) . 'templates/admin.php';
-    }
-    
-    public function settings_link( $links ){
-        $settings_link = '<a href="admin.php?page=hbb_plugin">Settings</a> ';
-        array_push( $links, $settings_link );
-        return $links;
-
-    }
-    //actvates the plugin
-    function activate(){
-        $this->custom_post_type();
-        //flushes rewrite rules in the DB
-        flush_rewrite_rules();
-}
-    //deactivate the plugin
-    function deactivate(){
-        //flushes rewrite rules in the DB
-        flush_rewrite_rules();
-        
+if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' ) ) {
+	require_once dirname( __FILE__ ) . '/vendor/autoload.php';
 }
 
+use Inc\Activate;
+use Inc\Deactivate;
+use Inc\Admin\AdminPages;
 
-    function custom_post_type(){
-        register_post_type( 'book',['public' => true, 'label' => 'Books']);
+if ( !class_exists( 'HBBPlugin' ) ) {
 
-    }
-    function enqueue(){
-        //enqueue all of our scripts
-        wp_enqueue_style('mypluginstyle', plugins_url('/assests/mystyle.css', __file__));
-        wp_enqueue_script('mypluginscript', plugins_url('/assests/myscript.js', __file__));
-    }
-    }
+	class HBBPlugin
+	{
 
-    
-    $HBBPlugin = new HBBPlugin('installed here now!');
-    $HBBPlugin->register();
+		public $plugin;
 
-    
+		function __construct() {
+			$this->plugin = plugin_basename( __FILE__ );
+		}
 
-    //activate
-    require_once plugin_dir_path(__FILE__) . 'inc/HBB-plugin-activate.php';
-    register_activation_hook(__FILE__, array( 'HBBPluginActivate', 'activate'));
+		function register() {
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 
+			add_action( 'admin_menu', array( $this, 'add_admin_pages' ) );
 
-    //deactivate
-    require_once plugin_dir_path(__FILE__) . 'inc/HBB-plugin-deactivate.php';
-    register_deactivation_hook(__FILE__, array( 'HBBPluginDectivate', 'deactivate'));
+			add_filter( "plugin_action_links_$this->plugin", array( $this, 'settings_link' ) );
+		}
 
-    // uninstall
-    }
+		public function settings_link( $links ) {
+			$settings_link = '<a href="admin.php?page=hbb_plugin">Settings</a>';
+			array_push( $links, $settings_link );
+			return $links;
+		}
+
+		public function add_admin_pages() {
+			add_menu_page( 'HBB Plugin', 'HBBPlugin', 'manage_options', 'hbb_plugin', array( $this, 'admin_index' ), 'dashicons-store', 110 );
+		}
+
+		public function admin_index() {
+			require_once plugin_dir_path( __FILE__ ) . 'templates/admin.php';
+		}
+
+		protected function create_post_type() {
+			add_action( 'init', array( $this, 'custom_post_type' ) );
+		}
+
+		function custom_post_type() {
+			register_post_type( 'book', ['public' => true, 'label' => 'Books'] );
+		}
+
+		function enqueue() {
+			// enqueue all our scripts
+			wp_enqueue_style( 'mypluginstyle', plugins_url( '/assets/mystyle.css', __FILE__ ) );
+			wp_enqueue_script( 'mypluginscript', plugins_url( '/assets/myscript.js', __FILE__ ) );
+		}
+
+		function activate() {
+			Activate::activate();
+		}
+	}
+
+	$HBBPlugin = new HBBPlugin();
+	$HBBPlugin->register();
+
+	// activation
+	register_activation_hook( __FILE__, array( $HBBPlugin, 'activate' ) );
+
+	// deactivation
+	register_deactivation_hook( __FILE__, array( 'Deactivate', 'deactivate' ) );
+
+}

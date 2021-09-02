@@ -1,0 +1,19 @@
+{
+    "name": "james/hbb",
+    "description": "HBB Plugin",
+    "type": "project",
+    "license": "GPL",
+    "autoload": {
+        "psr-4": {
+            "Inc\\": "./inc"
+        }
+    },
+    "authors": [
+        {
+            "name": "james lockwood",
+            "email": "ksjjl05@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

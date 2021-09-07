@@ -4,7 +4,6 @@
 * @package HBBPlugin
  */
 namespace Inc;
-
 final class Init
 {
 	/**
@@ -15,7 +14,8 @@ final class Init
 	{
 		return [
 			Pages\Admin::class,
-			Base\Enqueue::class
+			Base\Enqueue::class,
+			Base\SettingsLinks::class
 		];
 	}
 

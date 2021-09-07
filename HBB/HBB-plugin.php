@@ -30,14 +30,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 Copyright (C) 2021  James Lockwood
 */
 
+
 defined( 'ABSPATH' ) or die( 'Hey, what are you doing here? You silly human!' );
 
+// require once the Composer Autoload
 if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' ) ) {
 	require_once dirname( __FILE__ ) . '/vendor/autoload.php';
 }
-
+//Define Constants
 define( 'PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'PLUGIN', plugin_basename( __FILE__ ) );
+
+use Inc\Base\Activate;
+use Inc\Base\Deactivate;
+
+/**
+ * 
+ * THe code that runs on activation and deactivation
+ */
+function activate_hhb_plugin(){
+	Activate::activate();
+}
+function deactivate_hhb_plugin(){
+	Deactivate::deactivate();
+}
+register_activation_hook(__FILE__, 'activate_hhb_plugin');
+register_deactivation_hook(__FILE__, 'deactivate_hhb_plugin');
 
 if ( class_exists( 'Inc\\Init' ) ) {
 	Inc\Init::register_services();

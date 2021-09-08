@@ -3,7 +3,7 @@
 /** @package HBB Plugin
  */
 /*
-Plugin Name: HBB Plugin James
+Plugin Name: HBB Plugin 
 Plugin URI: https://www.poppidigital.com
 Description: Building a new plugin that will make a template for users.
 Version: 1.0.0
@@ -37,27 +37,22 @@ defined( 'ABSPATH' ) or die( 'Hey, what are you doing here? You silly human!' );
 if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' ) ) {
 	require_once dirname( __FILE__ ) . '/vendor/autoload.php';
 }
-//Define Constants
-define( 'PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
-define( 'PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'PLUGIN', plugin_basename( __FILE__ ) );
-
-use Inc\Base\Activate;
-use Inc\Base\Deactivate;
 
 /**
  * 
- * THe code that runs on activation and deactivation
+ * The code that runs on activation and deactivation
  */
 function activate_hhb_plugin(){
-	Activate::activate();
+	Inc\Base\Activate::activate();
 }
+register_activation_hook( __FILE__, 'activate_hbb_plugin' );
+
 function deactivate_hhb_plugin(){
-	Deactivate::deactivate();
+	Inc\Base\Deactivate::deactivate();
 }
-register_activation_hook(__FILE__, 'activate_hhb_plugin');
-register_deactivation_hook(__FILE__, 'deactivate_hhb_plugin');
+register_deactivation_hook( __FILE__, 'deactivate_hbb_plugin' );
 
 if ( class_exists( 'Inc\\Init' ) ) {
 	Inc\Init::register_services();
 }
+

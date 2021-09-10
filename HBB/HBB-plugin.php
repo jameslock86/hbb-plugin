@@ -30,29 +30,42 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 Copyright (C) 2021  James Lockwood
 */
 
-
+// If this file is called firectly, abort!!!
 defined( 'ABSPATH' ) or die( 'Hey, what are you doing here? You silly human!' );
 
-// require once the Composer Autoload
+// Require once the Composer Autoload
 if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' ) ) {
 	require_once dirname( __FILE__ ) . '/vendor/autoload.php';
 }
 
-/**
- * 
- * The code that runs on activation and deactivation
- */
-function activate_hhb_plugin(){
-	Inc\Base\Activate::activate();
-}
-register_activation_hook( __FILE__, 'activate_hbb_plugin' );
+// Define CONSTANTS
+define( 'PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+define( 'PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'PLUGIN', plugin_basename( __FILE__ ) );
 
-function deactivate_hhb_plugin(){
-	Inc\Base\Deactivate::deactivate();
+use Inc\Base\Activate;
+use Inc\Base\Deactivate;
+
+/**
+ * The code that runs during plugin activation
+ */
+function activate_hbb_plugin() {
+	Activate::activate();
 }
+
+/**
+ * The code that runs during plugin deactivation
+ */
+function deactivate_hbb_plugin() {
+	Deactivate::deactivate();
+}
+
+register_activation_hook( __FILE__, 'activate_hbb_plugin' );
 register_deactivation_hook( __FILE__, 'deactivate_hbb_plugin' );
 
+/**
+ * Initialize all the core classes of the plugin
+ */
 if ( class_exists( 'Inc\\Init' ) ) {
 	Inc\Init::register_services();
 }
-

@@ -1,9 +1,9 @@
 <?php
 /**
- * 
-* @package HBBPlugin
+ * @package  HBBPlugin
  */
 namespace Inc;
+
 final class Init
 {
 	/**

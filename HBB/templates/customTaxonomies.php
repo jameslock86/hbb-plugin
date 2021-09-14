@@ -1,0 +1,1 @@
+<h1>Custom Post Taxonomies</h1>

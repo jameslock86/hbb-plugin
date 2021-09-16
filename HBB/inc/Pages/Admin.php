@@ -3,6 +3,7 @@
  * @package  HBBPlugin
  */
 namespace Inc\Pages;
+
 use Inc\Api\SettingsApi;
 use Inc\Base\BaseController;
 use Inc\Api\Callbacks\AdminCallbacks;
